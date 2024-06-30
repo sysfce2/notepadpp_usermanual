@@ -32,24 +32,34 @@ When a UDL other than the default **User Defined Language** is selected in the p
 
 ### UDL Configuration Tabs
 
-Ivan Radić has created the definitive guide to the nuts and bolts of UDL version 2.1, which is available at [https://ivan-radic.github.io/udl-documentation/](https://ivan-radic.github.io/udl-documentation/).  He explains the details of what each of the tabs in the **User Defined Language** dialog box will do, and how to use them to style your various keywords.  However, these descriptions will give you an overview of what each tab is for.
+The "Details" links throughout this section will give additional information on how each of the fields in the UDL dialog will affect the syntax highlighting.  You should start with the [Details: Parsing](../udl/introduction/) to find out more on the order that UDL parsing occurs
 
 * The **Folder & Default** tab allows setting the default style, setting up keywords (or characters) that will allow code folding, and setting up styles for those keywords.  The **Open**, **Middle**, and **Close** boxes under each folding-type define the triggers for the start, middle, and end of folding.  For example, with `if`, `else`, and `endif`, it will define fold regions so that you can fold from `if` to `else`, from `else` to `endif`, and (assuming there is no `else` clause) from `if` to `endif`.  **Folding in comment** allows comments to include folding; **Folding in code 1 style** allows the triggers to be touching something else (so with a trigger of `{`, it will match `if{` or `if {`), whereas **Folding in code 2 style** requires there be whitespace around the trigger (so `if{` would _not_ match an **Open**-trigger of `{`).
+    - [⇒ Details: Default Style](../udl/default/)
+    - [⇒ Details: Folding in Code](../udl/folding-in-code/)
+    - [⇒ Details: Folding in Comment](../udl/folding-in-comment/)
 
 * The **Keywords List** tab allows defining eight (8) different groups of keywords, so you can style different groups of words differently (like built-in functions vs. flow control keywords).  Separate each keyword by a space (and that means that spaces are not allowed in keywords unless you put quotes around the phrase).  If **☐ Prefix Mode** is checked for a given group, that means that it will match anything that _starts_ with your string (so a keyword of `for` would match `for`, `forth`, and `format` if that option is checked).
 
     As a point of interest, you shouldn't have a given keyword in more than one keyword-group _or_ folder-group.  If you want `if`/`else`/`endif` to cause block-folding, do not also put them in one of your keyword-groups.
+
+    - [⇒ Details: Keywords](../udl/keywords/)
+
 
 * The **Comment & Number** tab allows setting styles for comments and for numbers.
     * **Line Comment Position** allows you to decide whether "line comments" can start anywhere on the line, must start at the beginning, or can start anywhere on the line as long as it's only whitespace before the comment.
     * **☐ Allow folding of comments** will allow comments to be foldable.
     * **Comment line style** defines the style  for "line comments" -- comments that proceed from the opening-trigger to the end of the line.
     * **Comment style** defines the style for multiline-comments.
+        - [⇒ Details: Comments](../udl/comments/)
     * **Number style** defines the style for numbers.  The various **Prefix**es, **Suffix**es, and **Extra**s allow you to define extra numeric representations (useful for hexadecimal, binary, octal and similar representations, as well as for defining currency as a number).  The **Range** allows you to define a syntax for ranges, so that two numbers with a listed symbol in between will still be treated as a number.  (However, there may be conflicts if the **Range** setting matches one from **Operators & Delimiters**)
+        - [⇒ Details: Numbers](../udl/numbers/)
 
 * The **Operators & Delimiters** tab allows setting styles for operators and for delimiter pairs
     * **Operators 1** and **Operators 2** define two groups of operators (usually math and math-like operators).  The first defines operators that will be matched even if they are touching other characters (allowing `1+2`), whereas the second defines operators that must contain spaces to be recognized (like `1 + 2`).
+        - [⇒ Details: Operators](../udl/operators/)
     * The various **Delimiter** styles are pairs of **Open** and **Close** characters, where those characters and whatever comes between them will be styled per the rules defined for that entry.  This is useful for styling strings, parenthesized parameter lists, bracketed expressions, and anything else where it can have a .  The **Escape** entry allows defining a way of "escaping" the character so that the delimiter pair is not prematurely closed (such as `"` / `\` / `"` allowing `"this \" is an embedded quote character inside a string, escaped by the backslash"`).
+        - [⇒ Details: Delimiters](../udl/delimiters/)
 
 #### Unicode Support
 
@@ -74,27 +84,32 @@ Each of the categories of keywords, folding, operators, comments, and the like h
     - You cannot enable nesting "inside" keywords, operators, or folding categories, because you cannot have another piece of text "inside" of a keyword or operator or folding word or symbol.
        - One might argue that the folding categories do have an "inside", between the folding words or symbols.  However, only the folding words or symbols themselves get the style applied; the text between folding words or symbols takes on the UDL's default or whatever other style category applies.  Thinking of it another way, folding categories essentially always have nesting enabled for all the categories, because any of the categories will be styled when found inside a folding range.
 
-### Import a UDL
-
-The internet has plenty of Notepad++ UDL xml files.  Once you have the XML, you can then import it into your Notepad++, so that you can use that UDL yourself.  There are two main ways to do this:
-
-1. Copy the XML into the [appropriate `userDefineLangs` subfolder](#udl-file-locations). Exit all instances of Notepad++ and reload, then the new UDL will be available.
-
-2. Use the **Import...** button, navigate to the source XML, and the UDL will be immediately available.
-
-The differences between those two methods are when the UDL will be available to Notepad++, and which config file will hold that UDL, per [UDL File Locations](#udl-file-locations).
-
 ## UDL File Locations
 
 Individual UDL files are stored in one of two `userDefineLangs` subfolders.  Each XML file in that folder is used to define one or more UDL.
 
-1. `%AppData%\Notepad++\userDefineLangs`: this is the default location for most Notepad++ installations
-2. `<notepad++_directory>\userDefineLangs`: this is the location for portable versions, or if you turned on "local configuration mode" (or unchecked `Use %AppData%`) during the installation.  `<notepad++_directory>` refers to whatever folder the `notepad++.exe` application executable is located.
+1. `%AppData%\Notepad++\userDefineLangs`: This is the default location for most Notepad++ installations.
+2. `<notepad++_directory>\userDefineLangs`: This is the location for portable versions, or if you turned on "local configuration mode" (or unchecked `Use %AppData%`) during the installation.  `<notepad++_directory>` refers to whatever folder the `notepad++.exe` application executable is located.
+3. `<alternate_directory>\userDefineLangs`: This is the location when using Cloud Configuration or `-settingsDir`option, as described in the [Config Files Location](../config-files/#configuration-files-location).
 
 If you created or imported a UDL using the **User Defined Languages** dialog inside Notepad++, they will be in the `userDefineLang.xml` file.  This single file often holds multiple UDL definitions.
 
-1. `%AppData%\Notepad++\userDefineLang.xml`: this is the default location for most Notepad++ installations
-2. `<notepad++_directory>\userDefineLang.xml`: this is the location for portable or "local configuration mode" versions, as described above
+1. `%AppData%\Notepad++\userDefineLang.xml`: This is the default location for most Notepad++ installations.
+2. `<notepad++_directory>\userDefineLang.xml`: This is the location for portable or "local configuration mode" versions, as described above.
+3. `<alternate_directory>\userDefineLang.xml`: This is the location when using Cloud Configuration or `-settingsDir`option, as described in the [Config Files Location](../config-files/#configuration-files-location).
+
+### Keeping UDL Files Separate
+
+As mentioned, Notpad++ will default to using the `userDefineLang.xml` file to hold all created or imported UDL.  If you prefer to make use of the `userDefineLangs\` subfolder instead, you can use the following sequence from the UDL dialog:
+
+1. Use **Create New** (or **Save As**), and give it a name (`MyName` in this example).
+    - If you want to move an existing UDL from `userDefineLang.xml` to a separate file, instead of creating a new one, pick that existing UDL from the dropdown instead of using **Create New** or **SaveAs**.
+2. Use **Export**, and save to `...\userDefineLangs\MyName.xml` (where `...` is based on your active [UDL File Location](#udl-file-locations)).
+3. Use **Remove** to delete the current copy of `MyName` from the UDL dialog.
+    - If you skip this step, you will have two copies of the same UDL name in step 5, which would be problematic.
+4. Exit Notepad++ and restart.
+5. **Language > MyName** will exist.
+6. To continue to define your language, go to **Language > User Defined Language > Define Your Language** and pick `MyName` from the dropdown, then edit the UDL settings to match your desired behavior.
 
 ## UDL and Themes
 
@@ -109,13 +124,23 @@ If you don't want to override the foreground and/or background text color for so
 
 If you want to define multiple UDL using the same basic color scheme as your active theme, you can start by setting the colors of the default **User Defined Language**, then **Create New** for each UDL that you want to match that scheme, customizing the rules for each new UDL.  (As soon as you exit Notepad++, the changes to the default UDL will be lost, but all the themes that you created from that will keep the colors they inherited.)
 
-## User Defined Languages Collection
+## Import a UDL
+
+The internet has plenty of Notepad++ UDL xml files.  Once you have the XML, you can then import it into your Notepad++, so that you can use that UDL yourself.  There are two main ways to do this:
+
+1. Copy the XML into the [appropriate `userDefineLangs` subfolder](#udl-file-locations). Exit all instances of Notepad++ and reload, then the new UDL will be available.
+
+2. Use the **Import...** button, navigate to the source XML, and the UDL will be immediately available.
+
+The differences between those two methods are when the UDL will be available to Notepad++, and which config file will hold that UDL, per [UDL File Locations](#udl-file-locations).
+
+### User Defined Languages Collection
 
 Throughout the history of Notepad++, many UDL files have been created by Notepad++ users and made publicly available.  There is once again a centralized [User Defined Languages Collection](https://github.com/notepad-plus-plus/userDefinedLanguages).
 
 https://github.com/notepad-plus-plus/userDefinedLanguages
 
-This central Collection is a convenient location for UDL-users to find new UDL files, and for UDL-authors to share their UDL files with the whole Notepad++ community.  The Collection includes instructions for how to use the files, as well as how to submit new UDL to the Collection.
+This central Collection is a convenient location for UDL-users to find new UDL files, and for UDL-authors to share their UDL files with the whole Notepad++ community.  The Collection includes instructions for how to use the files, as well as how to submit new UDL to the Collection -- but essentially, if you download them into the `userDefineLangs\` subfolder, as described in [Import a UDL](#import-a-udl), and restart Notepad++, you will have access to that UDL.
 
 ## UDL Configuration File Contents
 
